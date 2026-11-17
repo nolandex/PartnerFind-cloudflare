@@ -49,6 +49,7 @@ const legalModalData: Record<Locale, ModalContent> = {
       intro: "Dengan mengakses dan menggunakan platform PartnerFind, Anda menyetujui ketentuan berikut:",
       points: [
         "PartnerFind mempertemukan Pencari Peluang dan Pemberi Peluang; setiap kesepakatan kerja sama dibuat langsung antara kedua pihak.",
+        "Jika kesepakatan tercapai, PartnerFind menerima bagian dari penghasilan hasil kesepakatan, yang besarnya disepakati tertulis lebih dulu.",
         "PartnerFind tidak menjamin penghasilan, keuntungan, atau tercapainya kesepakatan.",
         "Kirimkan hanya informasi yang benar dan yang berhak Anda bagikan.",
         "Formulir pendaftaran ditangani oleh Tally sebagai penyedia formulir eksternal.",
@@ -83,6 +84,7 @@ const legalModalData: Record<Locale, ModalContent> = {
       intro: "By accessing and using the PartnerFind platform, you agree to the following terms:",
       points: [
         "PartnerFind brings Opportunity Seekers and Opportunity Providers together; any cooperation agreement is made directly between the two parties.",
+        "If an agreement is reached, PartnerFind receives a share of the income from the agreement, the amount of which is agreed in writing in advance.",
         "PartnerFind does not guarantee income, profit, or that an agreement will be reached.",
         "Submit only information that is accurate and that you are authorized to share.",
         "Registration forms are handled by Tally, an external form provider.",
@@ -117,6 +119,7 @@ const legalModalData: Record<Locale, ModalContent> = {
       intro: "Al acceder y utilizar la plataforma PartnerFind, aceptas los siguientes términos:",
       points: [
         "PartnerFind reúne a Buscadores y Proveedores de Oportunidades; cualquier acuerdo de colaboración se realiza directamente entre ambas partes.",
+        "Si se alcanza un acuerdo, PartnerFind recibe una parte de los ingresos del acuerdo, cuyo importe se acuerda por escrito con antelación.",
         "PartnerFind no garantiza ingresos, ganancias ni que se llegue a un acuerdo.",
         "Envía solo información veraz y que tengas autorización para compartir.",
         "Los formularios de registro los gestiona Tally, un proveedor externo de formularios.",
@@ -151,6 +154,7 @@ const legalModalData: Record<Locale, ModalContent> = {
       intro: "En accédant à la plateforme PartnerFind et en l'utilisant, vous acceptez les conditions suivantes :",
       points: [
         "PartnerFind met en relation les Chercheurs et les Fournisseurs d'Opportunités ; tout accord de coopération est conclu directement entre les deux parties.",
+        "Si un accord est conclu, PartnerFind reçoit une part des revenus de l'accord, dont le montant est convenu par écrit à l'avance.",
         "PartnerFind ne garantit ni revenus, ni bénéfices, ni la conclusion d'un accord.",
         "Ne transmettez que des informations exactes et que vous êtes autorisé à partager.",
         "Les formulaires d'inscription sont gérés par Tally, un fournisseur externe de formulaires.",
@@ -185,6 +189,7 @@ const legalModalData: Record<Locale, ModalContent> = {
       intro: "PartnerFindプラットフォームにアクセスし利用することで、以下の条件に同意したものとみなされます：",
       points: [
         "PartnerFindは機会を探す側と提供する側を引き合わせます。協力に関する合意は、両当事者間で直接結ばれるものです。",
+        "合意が成立した場合、PartnerFindは合意による収益の一部を受け取ります。金額は事前に書面で合意されます。",
         "PartnerFindは、収入、利益、または合意の成立を保証するものではありません。",
         "正確で、共有する権限のある情報のみを送信してください。",
         "登録フォームは外部のフォーム提供者であるTallyが処理します。",
@@ -219,6 +224,7 @@ const legalModalData: Record<Locale, ModalContent> = {
       intro: "访问并使用 PartnerFind 平台，即表示您同意以下条款：",
       points: [
         "PartnerFind 为机会寻找者与机会提供者牵线搭桥；任何合作协议均由双方直接达成。",
+        "如果达成协议，PartnerFind将收取协议收入的一部分，金额需事先书面商定。",
         "PartnerFind 不保证收入、利润或一定能达成协议。",
         "请只提交真实且您有权分享的信息。",
         "注册表由外部表单服务商 Tally 处理。",
@@ -253,44 +259,11 @@ const legalModalData: Record<Locale, ModalContent> = {
       intro: "باستخدامك منصة PartnerFind والوصول إليها، فأنت توافق على الشروط التالية:",
       points: [
         "يجمع PartnerFind بين الباحثين عن الفرص ومقدّميها؛ وأي اتفاق تعاون يتم مباشرة بين الطرفين.",
+        "إذا تم التوصل إلى اتفاق، تحصل PartnerFind على حصة من دخل الاتفاق، ويُتفق على مقدارها كتابةً مسبقاً.",
         "لا يضمن PartnerFind أي دخل أو ربح أو التوصل إلى اتفاق.",
         "أرسل فقط المعلومات الصحيحة والتي يحق لك مشاركتها.",
         "تتم معالجة نماذج التسجيل بواسطة Tally، وهي جهة خارجية مقدمة للنماذج.",
         "لا تستخدم الموقع أو نماذجه للبريد المزعج أو الاحتيال أو الأنشطة غير القانونية.",
-      ],
-    },
-  },
-  "tr-TR": {
-    about: {
-      intro: "PartnerFind, farklı sektör ve ölçeklerden Fırsat Arayanları Fırsat Sağlayanlarla buluşturur. Ekibimiz, iki tarafı ihtiyaç ve tekliflerine göre eşleştirir ve görüşüp bir iş birliği anlaşmasına varabilmeleri için bağlantı kurmalarına yardımcı olur. PartnerFind ayrıca yeni başlayanların fırsatlara hazırlanması için eğitim de sunar.",
-      flowTitle: "PartnerFind Nasıl Çalışır:",
-      steps: [
-        { bold: "Arayan veya Sağlayan Olarak Kaydolun", text: "Formu doldurun ve rolünüzü seçin." },
-        { bold: "Eşleştirme ve Kimlik Doğrulama", text: "Partnerleri eşleştirir ve iki tarafın kimliğini doğrularız." },
-        { bold: "Grup Kurun ve İş Birliğine Başlayın", text: "Görüşmek, anlaşmaya varmak ve birlikte çalışmak için bir grup kurarız." },
-      ],
-    },
-    contact: {
-      intro: "PartnerFind veya bir iş birliği fırsatı hakkında sorularınız mı var? Bu sitedeki kayıt formu aracılığıyla bize ulaşın ya da PartnerFind bağlantısını sizinle paylaşan kişiyle iletişime geçin — ekibimiz size dönüş yapacaktır.",
-    },
-    privacy: {
-      intro: "Gizliliğinize saygı duyuyoruz. Verilerinizin PartnerFind'da nasıl kullanıldığı aşağıda açıklanmıştır:",
-      points: [
-        "Form aracılığıyla gönderdiğiniz veriler, sizi ortaklarla eşleştirmek ve her iki tarafın kimliğini doğrulamak için kullanılır.",
-        "Eşleştirildiğinizde, görüşebilmeniz için yalnızca gerekli bilgiler potansiyel ortakla paylaşılır.",
-        "Formlar Tally tarafından sağlanır; formlar aracılığıyla gönderilen veriler bu harici sağlayıcı tarafından işlenir.",
-        "Kişisel verilerinizi satmıyoruz.",
-        "Eşleştirme için gerekli olmayan hassas bilgileri göndermekten kaçının.",
-      ],
-    },
-    terms: {
-      intro: "PartnerFind platformuna erişerek ve kullanarak aşağıdaki koşulları kabul etmiş olursunuz:",
-      points: [
-        "PartnerFind, Fırsat Arayanlar ile Fırsat Sağlayanları buluşturur; her türlü iş birliği anlaşması doğrudan iki taraf arasında yapılır.",
-        "PartnerFind gelir, kâr veya anlaşmaya varılacağını garanti etmez.",
-        "Yalnızca doğru ve paylaşma yetkiniz olan bilgileri gönderin.",
-        "Kayıt formları, harici form sağlayıcısı Tally tarafından işlenir.",
-        "Siteyi veya formları spam, dolandırıcılık veya yasa dışı faaliyetler için kullanmayın.",
       ],
     },
   },
@@ -321,6 +294,7 @@ const legalModalData: Record<Locale, ModalContent> = {
       intro: "PartnerFind 플랫폼에 접속하고 이용함으로써 다음 조건에 동의하게 됩니다:",
       points: [
         "PartnerFind는 기회를 찾는 사람과 제공하는 사람을 연결합니다. 협력 합의는 양 당사자 간에 직접 이루어집니다.",
+        "합의가 이루어지면 PartnerFind는 합의 수익의 일부를 받으며, 금액은 사전에 서면으로 합의됩니다.",
         "PartnerFind는 수입, 이익 또는 합의 성사를 보장하지 않습니다.",
         "정확하고 공유할 권한이 있는 정보만 제출하세요.",
         "등록 양식은 외부 양식 제공업체인 Tally가 처리합니다.",
@@ -355,6 +329,7 @@ const legalModalData: Record<Locale, ModalContent> = {
       intro: "Ao aceder e utilizar a plataforma PartnerFind, concorda com os seguintes termos:",
       points: [
         "O PartnerFind reúne Procuradores e Fornecedores de Oportunidades; qualquer acordo de cooperação é feito diretamente entre as duas partes.",
+        "Se um acordo for alcançado, a PartnerFind recebe uma parte dos rendimentos do acordo, cujo valor é acordado por escrito com antecedência.",
         "O PartnerFind não garante rendimentos, lucros nem a concretização de um acordo.",
         "Envie apenas informações verdadeiras e que tenha autorização para partilhar.",
         "Os formulários de registo são tratados pela Tally, um fornecedor externo de formulários.",
@@ -389,6 +364,7 @@ const legalModalData: Record<Locale, ModalContent> = {
       intro: "Получая доступ к платформе PartnerFind и используя её, вы соглашаетесь со следующими условиями:",
       points: [
         "PartnerFind знакомит искателей возможностей с поставщиками возможностей; каждое соглашение о сотрудничестве заключается напрямую между двумя сторонами.",
+        "В случае достижения соглашения PartnerFind получает долю дохода от соглашения, размер которой заранее согласовывается письменно.",
         "PartnerFind не гарантирует доход, прибыль или достижение соглашения.",
         "Отправляйте только достоверную информацию, которой вы вправе делиться.",
         "Форма регистрации обрабатывается Tally как внешним поставщиком форм.",

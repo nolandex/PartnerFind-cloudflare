@@ -6,39 +6,37 @@
 
 export const DEFAULT_TALLY_URLS: Record<string, string> = {
   // 1. Spanyol (es-ES)
-  'es-ES': 'https://tally.so/embed/ArrQjk?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1',
+  'es-ES': 'https://tally.so/embed/gbd2NP?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1',
 
   // 2. Inggris (en-US)
-  'en-US': 'https://tally.so/embed/yXX7jB?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1',
+  'en-US': 'https://tally.so/embed/laeQ7X?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1',
 
   // 3. Jepang (ja-JP)
-  'ja-JP': 'https://tally.so/embed/2jjRDV?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1',
+  'ja-JP': 'https://tally.so/embed/o9eWlO?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1',
 
   // 4. Prancis (fr-FR)
-  'fr-FR': 'https://tally.so/embed/VppxbJ?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1',
+  'fr-FR': 'https://tally.so/embed/6Djo1A?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1',
 
 
   // 6. Arab (ar-SA)
-  'ar-SA': 'https://tally.so/embed/vXXWzA?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1',
+  'ar-SA': 'https://tally.so/embed/OQ4vdY?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1',
 
   // 7. Korsel / Korea (ko-KR)
-  'ko-KR': 'https://tally.so/embed/7XXPPL?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1',
+  'ko-KR': 'https://tally.so/embed/vXekdD?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1',
 
 
   // 9. Portugis (pt-PT)
-  'pt-PT': 'https://tally.so/embed/gbbOON?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1',
+  'pt-PT': 'https://tally.so/embed/BEdN0K?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1',
 
   // 10. Indonesia (id-ID) - Form Asli Bawaan
-  'id-ID': 'https://tally.so/embed/WJJ1dv?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1',
+  'id-ID': 'https://tally.so/embed/rDa7Vp?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1',
 
-  // Turki (tr-TR) fallback to English form
-  'tr-TR': 'https://tally.so/embed/yXX7jB?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1',
 
   // Mandarin (zh-CN)
-  'zh-CN': 'https://tally.so/embed/ArzAvB?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1',
+  'zh-CN': 'https://tally.so/embed/xVMKgy?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1',
 
   // Rusia (ru-RU)
-  'ru-RU': 'https://tally.so/embed/o99xv1?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1',
+  'ru-RU': 'https://tally.so/embed/LD7lvl?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1',
 };
 
 /**

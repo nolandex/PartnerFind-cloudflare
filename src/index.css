@@ -21,7 +21,7 @@
     --muted-foreground: #a1a1aa;
     --border: rgba(255, 255, 255, 0.1);
     --destructive: #ef4444;
-    --brand-accent-val: 215 100% 50%;
+    --brand-accent: 215 100% 50%;
   }
 
   html, body {
@@ -49,3 +49,190 @@
   animation: btn-flash 3s cubic-bezier(0.4, 0, 0.2, 1) infinite;
 }
 
+/* ── Problem section (sebelum Bagaimana Caranya) ── */
+.pf-balance {
+  text-wrap: balance;
+}
+
+.pf-problem {
+  position: relative;
+  border: 1px solid rgba(10, 107, 246, 0.35);
+  box-shadow: none;
+  background: #070d18;
+}
+.pf-sol {
+  position: relative;
+  border: 1px solid #0a6bf6;
+  box-shadow: 0 0 18px rgba(10, 107, 246, 0.45);
+  background: rgba(10, 107, 246, 0.08);
+}
+
+.pf-panel {
+  position: relative;
+  border-radius: 28px;
+  border: 1px solid rgba(10, 107, 246, 0.35);
+  background: #070d18;
+  box-shadow: 0 0 34px -10px rgba(10, 107, 246, 0.35);
+  overflow: hidden;
+}
+.pf-panel-problems {
+  padding: 26px 22px 34px;
+}
+@media (min-width: 640px) {
+  .pf-panel-problems {
+    padding: 30px 30px 38px;
+  }
+}
+.pf-x-badge {
+  margin-inline-start: auto;
+  width: 22px;
+  height: 22px;
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: #fb8fa3;
+  background: rgba(244, 63, 94, 0.12);
+  box-shadow: inset 0 0 0 1px rgba(244, 63, 94, 0.35);
+}
+.pf-panel-arrow {
+  display: flex;
+  justify-content: center;
+  margin: -22px 0;
+  position: relative;
+  z-index: 2;
+}
+.pf-panel-arrow span {
+  width: 44px;
+  height: 44px;
+  border-radius: 9999px;
+  background: #0a6bf6;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 0 6px #070d18, 0 0 22px rgba(10, 107, 246, 0.65);
+}
+.pf-panel-sol {
+  background: linear-gradient(180deg, rgba(10, 107, 246, 0.16), rgba(10, 107, 246, 0.06));
+  border-top: 1px solid rgba(10, 107, 246, 0.55);
+  padding: 38px 22px 28px;
+  text-align: center;
+}
+
+.pf-card3 {
+  position: relative;
+  background: #050505;
+  border: 1px solid hsl(var(--brand-accent));
+  box-shadow: 0 0 16px hsl(var(--brand-accent) / 0.45);
+}
+
+.pf-glass {
+  position: relative;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.055), rgba(255, 255, 255, 0.02));
+  box-shadow:
+    0 -18px 34px -22px hsl(var(--brand-accent) / 0.45),
+    0 18px 40px -24px rgba(0, 0, 0, 0.9);
+}
+.pf-glass::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(180deg, hsl(var(--brand-accent) / 0.55), rgba(255, 255, 255, 0.1) 55%, rgba(255, 255, 255, 0.04));
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+.pf-icon-tile {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  flex-shrink: 0;
+  color: hsl(var(--brand-accent));
+  background: hsl(var(--brand-accent) / 0.12);
+  box-shadow:
+    inset 0 0 0 1px hsl(var(--brand-accent) / 0.35),
+    0 0 18px -2px hsl(var(--brand-accent) / 0.45);
+}
+
+.pf-solution {
+  position: relative;
+  background: linear-gradient(180deg, hsl(var(--brand-accent) / 0.1), rgba(255, 255, 255, 0.02));
+  box-shadow:
+    0 0 34px -8px hsl(var(--brand-accent) / 0.35),
+    0 18px 40px -24px rgba(0, 0, 0, 0.9);
+}
+.pf-solution::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(180deg, hsl(var(--brand-accent) / 0.7), hsl(var(--brand-accent) / 0.25) 60%, rgba(255, 255, 255, 0.06));
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+.pf-connector {
+  position: relative;
+  z-index: 1;
+  height: 24px;
+}
+.pf-connector .pf-line-v {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  width: 1px;
+  height: 100%;
+  transform: translateX(-50%);
+  background: linear-gradient(180deg, hsl(var(--brand-accent) / 0.15), hsl(var(--brand-accent) / 0.6), hsl(var(--brand-accent) / 0.15));
+}
+.pf-connector .pf-diag-l,
+.pf-connector .pf-diag-r {
+  display: none;
+}
+.pf-connector .pf-dot {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: 9px;
+  height: 9px;
+  border-radius: 9999px;
+  transform: translate(-50%, 50%);
+  background: hsl(var(--brand-accent));
+  box-shadow: 0 0 12px 2px hsl(var(--brand-accent) / 0.75);
+}
+@media (min-width: 768px) {
+  .pf-connector .pf-line-v {
+    display: none;
+  }
+  .pf-connector .pf-diag-l,
+  .pf-connector .pf-diag-r {
+    display: block;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 25%;
+    background: hsl(var(--brand-accent) / 0.55);
+  }
+  .pf-connector .pf-diag-l {
+    left: 25%;
+    clip-path: polygon(0 0, 100% calc(100% - 1.5px), 100% 100%, 0 1.5px);
+  }
+  .pf-connector .pf-diag-r {
+    right: 25%;
+    clip-path: polygon(100% 0, 0 calc(100% - 1.5px), 0 100%, 100% 1.5px);
+  }
+}

@@ -57,9 +57,12 @@ export async function saveWebsiteContent(updates: Partial<WebsiteContentConfig>,
   } catch (error) { console.error("Error saving website content to Cloudflare:", error); return false; }
 }
 export function subscribeWebsiteContent(callback: (config: WebsiteContentConfig) => void): () => void {
+  // Tanpa fallback: bila polling gagal (jaringan lambat), konten terakhir yang
+  // bagus tetap dipakai. Fallback DEFAULT dulu mengosongkan gambar/fitur tiap
+  // polling gagal sehingga gambar langkah "muncul lalu hilang" (2026-11-16).
   return subscribeJson(`/api/settings/${SETTINGS_DOC_ID}`, (raw) => {
     const config = sanitizeContentConfig(raw || {});
     try { localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(config)); } catch {}
     callback(config);
-  }, DEFAULT_WEBSITE_CONTENT);
+  });
 }

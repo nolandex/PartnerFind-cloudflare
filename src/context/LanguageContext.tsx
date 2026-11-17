@@ -44,11 +44,21 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   }, []);
 
   useEffect(() => {
-    const lang = translations[locale] || translations["en-US"];
-    if ((lang as any)?.color) {
-      document.documentElement.style.setProperty("--brand-accent", (lang as any).color);
-    }
-    document.documentElement.dir = "ltr";
+    // RTL untuk Arab; LTR untuk locale lain (2026-11-15)
+    document.documentElement.dir = locale === "ar-SA" ? "rtl" : "ltr";
+    const titles: Record<string, string> = {
+      "id-ID": "PartnerFind - Platform Kerja Sama Global",
+      "en-US": "PartnerFind - Global Partnership Platform",
+      "es-ES": "PartnerFind - Plataforma Global de Colaboración",
+      "fr-FR": "PartnerFind - Plateforme Mondiale de Partenariat",
+      "ja-JP": "PartnerFind - グローバルパートナーシッププラットフォーム",
+      "zh-CN": "PartnerFind - 全球合作平台",
+      "ar-SA": "PartnerFind - منصة الشراكة العالمية",
+      "ko-KR": "PartnerFind - 글로벌 파트너십 플랫폼",
+      "pt-PT": "PartnerFind - Plataforma Global de Parcerias",
+      "ru-RU": "PartnerFind - Глобальная платформа партнёрства",
+    };
+    document.title = titles[locale] || titles["id-ID"];
   }, [locale]);
 
   const t = useCallback(

@@ -1,16 +1,14 @@
 import React, { useMemo, memo } from "react";
 import { Globe, GLOBE_CONFIG } from "./magicui/globe";
-import { useLanguage } from "../context/LanguageContext";
-import { translations } from "../lib/translations";
 
 /**
- * Converts HSL color string (e.g. "215 100% 50%" or "0 100% 50%")
+ * Converts an HSL color string (e.g. "215 100% 50%")
  * to normalized RGB array [r, g, b] between 0 and 1.
  */
 function hslStringToRgb(hslStr?: string): [number, number, number] {
-  if (!hslStr) return [0.85, 0.25, 0.25];
+  if (!hslStr) return [0, 0.46, 1];
   const parts = hslStr.trim().split(/\s+/);
-  if (parts.length < 3) return [0.85, 0.25, 0.25];
+  if (parts.length < 3) return [0, 0.46, 1];
 
   const h = parseFloat(parts[0]) / 360;
   const s = parseFloat(parts[1]) / 100;
@@ -43,13 +41,9 @@ function hslStringToRgb(hslStr?: string): [number, number, number] {
 }
 
 export const RotatingGlobe = memo(function RotatingGlobe() {
-  const { locale } = useLanguage();
-
-  // Extract colors matching the active language theme
+  // Single brand accent color for all languages
   const { landColor, rimGlowColor } = useMemo(() => {
-    const langConfig = translations[locale] || translations["id-ID"];
-    const colorStr = (langConfig as any)?.color || "0 100% 50%";
-    const [rawR, rawG, rawB] = hslStringToRgb(colorStr);
+    const [rawR, rawG, rawB] = hslStringToRgb("215 100% 50%");
 
     // Landmass color: vivid and luminous
     const lr = Math.max(0.2, Math.min(0.98, rawR * 0.78 + 0.2));
@@ -73,7 +67,7 @@ export const RotatingGlobe = memo(function RotatingGlobe() {
         Number(gb.toFixed(3)),
       ] as [number, number, number],
     };
-  }, [locale]);
+  }, []);
 
   const globeConfig = useMemo(() => {
     return {

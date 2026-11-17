@@ -42,7 +42,7 @@ function pad(num: number): string {
   return String(num).padStart(2, "0");
 }
 
-const UNIT_LABELS: Record<
+export const UNIT_LABELS: Record<
   string,
   { days: string; hours: string; mins: string; secs: string; title: string }
 > = {
@@ -51,77 +51,70 @@ const UNIT_LABELS: Record<
     hours: "JAM",
     mins: "MENIT",
     secs: "DETIK",
-    title: "Dimulai dalam",
+    title: "Pendaftaran awal dibuka",
   },
   "en-US": {
     days: "DAYS",
     hours: "HOURS",
     mins: "MINS",
     secs: "SECS",
-    title: "Starts In",
+    title: "Early registration open",
   },
   "es-ES": {
     days: "DÍAS",
     hours: "HORAS",
     mins: "MINS",
     secs: "SEGS",
-    title: "Comienza en",
+    title: "Inscripción anticipada abierta",
   },
   "fr-FR": {
     days: "JOURS",
     hours: "HEURES",
     mins: "MINS",
     secs: "SECS",
-    title: "Commence dans",
+    title: "Inscriptions anticipées ouvertes",
   },
   "ja-JP": {
     days: "日",
     hours: "時間",
     mins: "分",
     secs: "秒",
-    title: "開始まで",
+    title: "早期登録受付中",
   },
   "ar-SA": {
     days: "أيام",
     hours: "ساعات",
     mins: "دقائق",
     secs: "ثوانٍ",
-    title: "يبدأ خلال",
+    title: "التسجيل المبكر مفتوح",
   },
   "ko-KR": {
     days: "일",
     hours: "시간",
     mins: "분",
     secs: "초",
-    title: "시작까지",
+    title: "사전 등록 접수 중",
   },
   "pt-PT": {
     days: "DIAS",
     hours: "HORAS",
     mins: "MINS",
     secs: "SEGS",
-    title: "Começa em",
-  },
-  "tr-TR": {
-    days: "GÜN",
-    hours: "SAAT",
-    mins: "DK",
-    secs: "SN",
-    title: "Başlamasına kalan",
+    title: "Inscrições antecipadas abertas",
   },
   "zh-CN": {
     days: "天",
     hours: "小时",
     mins: "分钟",
     secs: "秒",
-    title: "距离开始还有",
+    title: "提前注册已开放",
   },
   "ru-RU": {
     days: "ДНЕЙ",
     hours: "ЧАСОВ",
     mins: "МИНУТ",
     secs: "СЕКУНД",
-    title: "Подбор начнётся через",
+    title: "Ранняя регистрация открыта",
   },
 };
 
@@ -198,7 +191,7 @@ export const HeroCountdown: React.FC<HeroCountdownProps> = memo(({ triggerPulse 
   return (
     <div
       id="hero-countdown-section"
-      className="w-full max-w-xl mx-auto mt-7 sm:mt-9 relative z-20 text-center select-none"
+      className="w-full max-w-xl mx-auto relative z-20 text-center select-none"
     >
       {/* Ambient background soft glow (static, lightweight, constant color) */}
       <div
@@ -277,6 +270,7 @@ export const HeroCountdown: React.FC<HeroCountdownProps> = memo(({ triggerPulse 
             </span>
           </div>
         </div>
+
       </div>
     </div>
   );

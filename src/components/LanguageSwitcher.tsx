@@ -37,7 +37,7 @@ export function LanguageSwitcher({ variant = "desktop" }: { variant?: "desktop" 
                 : "text-foreground/70 hover:bg-foreground/[0.06] hover:text-foreground"
             }`}
           >
-            <span className="text-xl leading-none">{lang.flag}</span>
+            <span className="w-7 shrink-0 text-base leading-none text-center">{lang.flag}</span>
             <span>{lang.name}</span>
           </button>
         ))}
@@ -52,9 +52,7 @@ export function LanguageSwitcher({ variant = "desktop" }: { variant?: "desktop" 
         onClick={() => setOpen((o) => !o)}
         className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium text-foreground/70 hover:text-foreground hover:bg-foreground/[0.06] transition-colors cursor-pointer"
       >
-        <span className="text-base leading-none">{current.flag}</span>
-        <span className="hidden lg:block">{current.name}</span>
-        <span className="lg:hidden">{current.short}</span>
+        <span className="text-lg leading-none">{current.flag}</span>
         <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${open ? "rotate-180" : ""}`} />
       </button>
       <AnimatePresence>
@@ -82,7 +80,7 @@ export function LanguageSwitcher({ variant = "desktop" }: { variant?: "desktop" 
                     : "text-foreground/60 hover:bg-foreground/[0.04] hover:text-foreground"
                 }`}
               >
-                <span>{lang.flag}</span>
+                <span className="w-7 shrink-0 text-base leading-none text-center">{lang.flag}</span>
                 <span>{lang.name}</span>
               </button>
             ))}

@@ -18,7 +18,6 @@ import {
   Save,
   Sparkles,
   Layers,
-  Megaphone,
   Star,
 } from 'lucide-react';
 import {
@@ -47,7 +46,6 @@ import {
   extractYoutubeId as extractYoutubeCleanId
 } from '../lib/websiteContentService';
 import { AdminImagePicker } from '../components/AdminImagePicker';
-import InvitersTab from '../components/InvitersTab';
 import TestimonialsTab from '../components/TestimonialsTab';
 import { DEFAULT_TALLY_URLS } from '../lib/tallyConfig';
 
@@ -73,7 +71,7 @@ export default function Admin() {
   const lastLiveGroupRef = useRef<number | null>(null);
   
   // 2 Admin choices: 'content' (Atur Konten Website) | 'rules' (Angka Live & Countdown)
-  const [activeTab, setActiveTab] = useState<'content' | 'rules' | 'inviters' | 'testimonials'>('content');
+  const [activeTab, setActiveTab] = useState<'content' | 'rules' | 'testimonials'>('content');
   const [rulesFilter, setRulesFilter] = useState<'all' | 'hero' | 'group' | 'countdown'>('all');
   
   // ── Website Content State (Embed Video, Gambar, Teks) ──
@@ -82,6 +80,7 @@ export default function Admin() {
   const [contentSubTab, setContentSubTab] = useState<'all' | 'images' | 'texts'>('all');
   const [savingContent, setSavingContent] = useState(false);
   const [contentSuccessMsg, setContentSuccessMsg] = useState('');
+
   const [activeTextLang, setActiveTextLang] = useState<string>('id-ID');
 
   const SUPPORTED_ADMIN_LANGUAGES = [
@@ -93,7 +92,6 @@ export default function Admin() {
     { code: 'ja-JP', label: '日本語', flag: '🇯🇵' },
     { code: 'ar-SA', label: 'العربية', flag: '🇸🇦' },
     { code: 'ru-RU', label: 'Русский', flag: '🇷🇺' },
-    { code: 'tr-TR', label: 'Türkçe', flag: '🇹🇷' },
     { code: 'ko-KR', label: '한국어', flag: '🇰🇷' },
     { code: 'pt-PT', label: 'Português', flag: '🇵🇹' },
   ];
@@ -299,7 +297,7 @@ export default function Admin() {
   }, [authed]);
 
   const hasInitializedRulesRef = useRef(false);
-  const prevTabRef = useRef<'content' | 'rules' | 'inviters' | 'testimonials'>('content');
+  const prevTabRef = useRef<'content' | 'rules' | 'testimonials'>('content');
 
   useEffect(() => {
     if (!counterConfig) return;
@@ -597,22 +595,13 @@ export default function Admin() {
               <span>2. Angka Live & Countdown</span>
             </button>
             <button
-              onClick={() => setActiveTab('inviters')}
-              className={`pb-3 text-sm font-bold border-b-2 px-4 whitespace-nowrap transition-all cursor-pointer flex items-center gap-2 ${
-                activeTab === 'inviters' ? 'border-rose-400 text-white' : 'border-transparent text-neutral-500 hover:text-neutral-300'
-              }`}
-            >
-              <Megaphone className="w-4 h-4 text-rose-400" />
-              <span>3. Testimoni Pengundang</span>
-            </button>
-            <button
               onClick={() => setActiveTab('testimonials')}
               className={`pb-3 text-sm font-bold border-b-2 px-4 whitespace-nowrap transition-all cursor-pointer flex items-center gap-2 ${
                 activeTab === 'testimonials' ? 'border-amber-400 text-white' : 'border-transparent text-neutral-500 hover:text-neutral-300'
               }`}
             >
               <Star className="w-4 h-4 text-amber-400" />
-              <span>4. Testimoni Website</span>
+              <span>3. Testimoni Website</span>
             </button>
           </div>
 
@@ -621,9 +610,7 @@ export default function Admin() {
               ? 'Atur gambar website dan link form pendaftaran.'
               : activeTab === 'rules'
                 ? 'Pusat kendali aturan live counter dan countdown.'
-                : activeTab === 'inviters'
-                    ? 'Catat kejadian pengundang yang benar-benar terjadi — bergabung, penarikan imbalan yang sudah dibayar, review asli. Setiap catatan tampil di /pengundang dan terkirim ke channel Telegram.'
-                    : 'Upload foto, nama, dan quote testimoni untuk section testimoni di landing page (di atas CTA). Website menampilkan 3 testimoni terbaru.'}
+                : 'Upload foto, nama, dan quote testimoni untuk section testimoni di landing page (di atas CTA). Website menampilkan 3 testimoni terbaru.'}
           </p>
 
           {activeTab === 'content' && (
@@ -726,7 +713,7 @@ export default function Admin() {
                     </div>
                   </div>
                   <select
-                    value={activeTextLang}
+                value={activeTextLang}
                     onChange={(e) => setActiveTextLang(e.target.value)}
                     className="bg-neutral-950 border border-neutral-800 rounded-xl px-3 py-2 text-xs text-white font-medium focus:outline-none focus:border-indigo-400"
                   >
@@ -800,8 +787,6 @@ export default function Admin() {
           {/* ══════════════════════════════════════════════════════════════ */}
           {/* TAB 2: ANGKA LIVE & COUNTDOWN TIMER                           */}
           {/* ══════════════════════════════════════════════════════════════ */}
-          {activeTab === 'inviters' && (<InvitersTab />)}
-
           {activeTab === 'testimonials' && (<TestimonialsTab />)}
 
           {activeTab === 'rules' && (

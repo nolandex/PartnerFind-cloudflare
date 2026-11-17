@@ -111,7 +111,7 @@ async function writeSetting(env, id, data) {
 // carries a content hash, so an admin image change produces a fresh URL.
 // Admin browsers (session cookie) keep receiving the raw data URIs so the
 // admin panel's image editor and its saves are unaffected.
-const IMAGE_FIELDS = new Set(["feature1Image", "feature2Image", "feature3Image", "ctaBannerImage"]);
+const IMAGE_FIELDS = new Set(["feature1Image", "feature2Image", "feature3Image", "ctaBannerImage", "feature1Image_id-ID", "feature1Image_en-US", "feature1Image_es-ES", "feature1Image_ja-JP", "feature1Image_fr-FR", "feature1Image_ar-SA", "feature1Image_ru-RU", "feature1Image_ko-KR", "feature1Image_pt-PT", "feature1Image_zh-CN", "feature2Image_id-ID", "feature2Image_en-US", "feature2Image_es-ES", "feature2Image_ja-JP", "feature2Image_fr-FR", "feature2Image_ar-SA", "feature2Image_ru-RU", "feature2Image_ko-KR", "feature2Image_pt-PT", "feature2Image_zh-CN", "feature3Image_id-ID", "feature3Image_en-US", "feature3Image_es-ES", "feature3Image_ja-JP", "feature3Image_fr-FR", "feature3Image_ar-SA", "feature3Image_ru-RU", "feature3Image_ko-KR", "feature3Image_pt-PT", "feature3Image_zh-CN"]);
 const hashString = (str) => {
   let h = 5381;
   for (let i = 0; i < str.length; i++) h = ((h << 5) + h + str.charCodeAt(i)) | 0;
@@ -174,117 +174,66 @@ async function getAndAdvanceHero(env) {
   return cfg;
 }
 
-async function notifyChannel(env, text) {
-  // Kirim pesan ke channel Telegram lewat bot Worker (endpoint /notify
-  // ber-secret bersama). Hanya untuk kejadian ASLI yang dicatat admin.
+const TESTI_LOCALES = ["en-US", "zh-CN", "es-ES", "id-ID", "ja-JP", "fr-FR", "ar-SA", "ru-RU", "ko-KR", "pt-PT"];
+function parseQuotes(v) {
   try {
-    if (!env.NOTIFY_SECRET) return;
-    await fetch("https://partnerfind-bot.partnerfind.workers.dev/notify", {
-      method: "POST",
-      headers: { "content-type": "application/json", "x-notify-secret": env.NOTIFY_SECRET },
-      body: JSON.stringify({ text }),
-    });
-  } catch (e) {
-    console.log("notif channel gagal:", String(e));
-  }
+    const o = typeof v === "string" ? JSON.parse(v) : null;
+    return o && typeof o === "object" && !Array.isArray(o) ? o : null;
+  } catch { return null; }
 }
-async function handleMatching(request, env, path, method) {
-  if (path.startsWith("/api/admin/inviter-events") || path.startsWith("/api/admin/testimonials")) {
+function sanitizeQuotes(input) {
+  const out = {};
+  if (input && typeof input === "object") {
+    for (const loc of TESTI_LOCALES) {
+      const s = String(input[loc] ?? "").trim().slice(0, 600);
+      if (s) out[loc] = s;
+    }
+  }
+  return out;
+}
+async function handleTestimonials(request, env, path, method) {
+  if (path.startsWith("/api/admin/testimonials")) {
     const admin = await requireAdmin(request, env);
     if (!admin) return fail("Akses admin diperlukan.", 401);
-    if (path === "/api/admin/inviter-events" && method === "GET") {
-      const { results } = await env.DB.prepare("SELECT * FROM inviter_events ORDER BY id DESC LIMIT 200").all();
-      return json({ data: results || [] });
-    }
-    if (path === "/api/admin/inviter-events" && method === "POST") {
-      const body = await parseJson(request);
-      const type = String(body?.type || "");
-      const TYPES = ["join", "withdraw", "review_short", "review_medium", "review_long"];
-      if (!TYPES.includes(type)) return fail("Jenis testimoni tidak valid.");
-      const name = String(body?.name || "").trim().slice(0, 100);
-      if (!name) return fail("Nama pengundang wajib diisi.");
-      let amount = null;
-      let text = null;
-      if (type === "withdraw") {
-        amount = Math.floor(Number(body?.amount));
-        if (!amount || amount <= 0) return fail("Nominal penarikan wajib diisi dan lebih dari 0.");
-      }
-      if (type.startsWith("review")) {
-        const cap = type === "review_short" ? 200 : type === "review_medium" ? 500 : 1200;
-        text = String(body?.text || "").trim().slice(0, cap);
-        if (!text) return fail("Isi review wajib diisi.");
-      }
-      const res = await env.DB.prepare("INSERT INTO inviter_events(type,name,amount,text) VALUES(?,?,?,?)").bind(type, name, amount, text).run();
-      const rp = amount ? amount.toLocaleString("id-ID") : "";
-      const msg =
-        type === "join"
-          ? `\u{1F389} Pengundang baru bergabung di PartnerFind!\n${name} baru saja bergabung sebagai pengundang.\n\nIkut bergabung: https://partnerfind.ai.id/pengundang`
-          : type === "withdraw"
-            ? `\u{1F4B8} Imbalan pengundang cair!\n${name} telah menarik imbalan sebesar Rp${rp}.\n\nJadi pengundang juga: https://partnerfind.ai.id/pengundang`
-            : `\u{2B50} Review pengundang PartnerFind\n\u{201C}${text}\u{201D}\n\u{2014} ${name}\n\nhttps://partnerfind.ai.id/pengundang`;
-      await notifyChannel(env, msg);
-      return json({ success: true, id: res?.meta?.last_row_id ?? null });
-    }
-    if (path === "/api/admin/inviter-events/import" && method === "POST") {
-      // Impor massal catatan pengundang ASLI (mis. kejadian seharian yang
-      // dicatat dulu lalu dimasukkan sekaligus). Maks 500 baris per impor.
-      // Semua tampil di website; ke channel terkirim SATU ringkasan agar
-      // channel tidak kebanjiran ratusan postingan sekaligus.
-      const body = await parseJson(request);
-      const items = Array.isArray(body?.items) ? body.items.slice(0, 500) : [];
-      const TYPES = ["join", "withdraw", "review_short", "review_medium", "review_long"];
-      let inserted = 0, skipped = 0;
-      for (const raw of items) {
-        const type = String(raw?.type || "");
-        const name = String(raw?.name || "").trim().slice(0, 100);
-        if (!TYPES.includes(type) || !name) { skipped++; continue; }
-        let amount = null, text = null, ok = true;
-        if (type === "withdraw") {
-          amount = Math.floor(Number(raw?.amount));
-          if (!amount || amount <= 0) ok = false;
-        }
-        if (type.startsWith("review")) {
-          const cap = type === "review_short" ? 200 : type === "review_medium" ? 500 : 1200;
-          text = String(raw?.text || "").trim().slice(0, cap);
-          if (!text) ok = false;
-        }
-        if (!ok) { skipped++; continue; }
-        await env.DB.prepare("INSERT INTO inviter_events(type,name,amount,text) VALUES(?,?,?,?)").bind(type, name, amount, text).run();
-        inserted++;
-      }
-      if (inserted > 0) {
-        await notifyChannel(env, `\u{1F4CB} ${inserted} testimoni pengundang baru tercatat.\nLihat semuanya di: https://partnerfind.ai.id/pengundang`);
-      }
-      return json({ success: true, inserted, skipped });
-    }
-    const invDel = path.match(/^\/api\/admin\/inviter-events\/(\d+)$/);
-    if (invDel && method === "DELETE") {
-      await env.DB.prepare("DELETE FROM inviter_events WHERE id = ?").bind(Number(invDel[1])).run();
-      return json({ success: true });
-    }
     if (path === "/api/admin/testimonials" && method === "GET") {
       const { results } = await env.DB.prepare("SELECT * FROM testimonials ORDER BY id DESC LIMIT 200").all();
-      return json({ data: results || [] });
+      const data = (results || []).map((r) => ({ ...r, quotes: parseQuotes(r.quotes) }));
+      return json({ data });
     }
     if (path === "/api/admin/testimonials" && method === "POST") {
       const body = await parseJson(request);
       const name = String(body?.name || "").trim().slice(0, 100);
       if (!name) return fail("Nama wajib diisi.");
-      const quote = String(body?.quote || "").trim().slice(0, 600);
-      if (!quote) return fail("Quote testimoni wajib diisi.");
+      const quotes = sanitizeQuotes(body?.quotes);
+      const legacy = String(body?.quote || "").trim().slice(0, 600);
+      if (legacy && !quotes["id-ID"]) quotes["id-ID"] = legacy;
+      const quote = quotes["id-ID"] || quotes["en-US"] || TESTI_LOCALES.map((l) => quotes[l]).find(Boolean) || "";
+      if (!quote) return fail("Minimal satu quote wajib diisi.");
       const detail = String(body?.detail || "").trim().slice(0, 120) || null;
       let photo = null;
       if (body?.photo) {
         photo = String(body.photo);
         if (!photo.startsWith("data:image/") || photo.length > 260000) return fail("Foto tidak valid atau terlalu besar (maks ~190 KB).");
       }
-      const res = await env.DB.prepare("INSERT INTO testimonials(name,quote,photo,detail) VALUES(?,?,?,?)").bind(name, quote, photo, detail).run();
+      const res = await env.DB.prepare("INSERT INTO testimonials(name,quote,photo,detail,quotes) VALUES(?,?,?,?,?)").bind(name, quote, photo, detail, Object.keys(quotes).length ? JSON.stringify(quotes) : null).run();
       return json({ success: true, id: res?.meta?.last_row_id ?? null });
     }
     const testiDel = path.match(/^\/api\/admin\/testimonials\/(\d+)$/);
     if (testiDel && method === "DELETE") {
       await env.DB.prepare("DELETE FROM testimonials WHERE id = ?").bind(Number(testiDel[1])).run();
       return json({ success: true });
+    }
+    if (path === "/api/admin/testimonials-visibility") {
+      if (method === "GET") {
+        const s = (await readSetting(env, "testimonials_visibility")) || {};
+        return json({ hidden: !!s.hidden });
+      }
+      if (method === "POST") {
+        const body = await parseJson(request);
+        const hidden = !!body?.hidden;
+        await writeSetting(env, "testimonials_visibility", { hidden });
+        return json({ success: true, hidden });
+      }
     }
     return fail("Endpoint tidak ditemukan.", 404);
   }
@@ -299,23 +248,14 @@ async function handleApi(request, env) {
     const dbCheck = await env.DB.prepare("SELECT 1 AS ok").first();
     return json({ status: dbCheck?.ok === 1 ? "ok" : "degraded", backend: "cloudflare-d1", timestamp: nowIso() }, dbCheck?.ok === 1 ? 200 : 503);
   }
-  if (path === "/api/inviter-events" && method === "GET") {
-    // Aktivitas pengundang ASLI yang dicatat admin: bergabung, penarikan
-    // imbalan yang dibayar, dan review pengundang.
-    const rows = await env.DB.prepare("SELECT id,type,name,amount,text,created_at FROM inviter_events ORDER BY id DESC LIMIT 20").all();
-    const countsRows = await env.DB.prepare("SELECT type, COUNT(*) AS n FROM inviter_events GROUP BY type").all();
-    const counts = { join: 0, withdraw: 0, review: 0 };
-    for (const r of countsRows?.results || []) {
-      if (r.type === "join") counts.join = r.n;
-      else if (r.type === "withdraw") counts.withdraw = r.n;
-      else if (String(r.type).startsWith("review")) counts.review += r.n;
-    }
-    return json({ events: rows?.results || [], counts }, 200, { "cache-control": "public, max-age=60" });
-  }
   if (path === "/api/testimonials" && method === "GET") {
     // Testimoni yang tampil di landing (di atas CTA): 3 terbaru dari panel admin.
-    const rows = await env.DB.prepare("SELECT id,name,quote,photo,detail,created_at FROM testimonials ORDER BY id DESC LIMIT 3").all();
-    return json({ data: rows?.results || [] }, 200, { "cache-control": "public, max-age=60" });
+    // Admin bisa menyembunyikan seluruh section dari tab Testimoni Website.
+    const visSet = (await readSetting(env, "testimonials_visibility")) || {};
+    if (visSet.hidden) return json({ data: [], hidden: true }, 200, { "cache-control": "no-cache" });
+    const rows = await env.DB.prepare("SELECT id,name,quote,photo,detail,quotes,created_at FROM testimonials ORDER BY id DESC LIMIT 3").all();
+    const data = (rows?.results || []).map((r) => ({ ...r, quotes: parseQuotes(r.quotes) }));
+    return json({ data }, 200, { "cache-control": "public, max-age=60" });
   }
   if (path === "/api/admin/session" && method === "GET") {
     const auth = await getAdminAuth(env);
@@ -381,9 +321,23 @@ async function handleApi(request, env) {
     } catch { /* cache purge is best-effort */ }
     return json({ success: true, data: updated });
   }
-  const imgMatch = path.match(/^\/api\/img\/([a-zA-Z0-9]+)$/);
+  const imgMatch = path.match(/^\/api\/img\/([a-zA-Z0-9_-]+)$/);
   if (imgMatch && method === "GET") {
     const field = imgMatch[1];
+    const heroLocMatch = field.match(/^heroGif-([a-zA-Z-]+)$/);
+    if (heroLocMatch) {
+      const vc = (await readSetting(env, "video_config")) || {};
+      const value = vc.gifPerLocale && vc.gifPerLocale[heroLocMatch[1]];
+      const m = typeof value === "string" && value.match(/^data:([^;,]+);base64,([\s\S]+)$/);
+      if (!m) return fail("Gambar tidak ditemukan.", 404);
+      return new Response(base64ToBytes(m[2]), { status: 200, headers: { "content-type": m[1], "cache-control": "public, max-age=31536000, immutable" } });
+    }
+    if (field === "heroGif") {
+      const vc = (await readSetting(env, "video_config")) || {};
+      const m = typeof vc.gifData === "string" && vc.gifData.match(/^data:([^;,]+);base64,([\s\S]+)$/);
+      if (!m) return fail("Gambar tidak ditemukan.", 404);
+      return new Response(base64ToBytes(m[2]), { status: 200, headers: { "content-type": m[1], "cache-control": "public, max-age=31536000, immutable" } });
+    }
     if (!IMAGE_FIELDS.has(field)) return fail("Gambar tidak ditemukan.", 404);
     const content = (await readSetting(env, "website_content")) || {};
     const value = content[field];
@@ -394,7 +348,7 @@ async function handleApi(request, env) {
       headers: { "content-type": match[1], "cache-control": "public, max-age=31536000, immutable" },
     });
   }
-  const matchingResponse = await handleMatching(request, env, path, method);
+  const matchingResponse = await handleTestimonials(request, env, path, method);
   if (matchingResponse) return matchingResponse;
   const settingMatch = path.match(/^\/api\/settings\/([a-zA-Z0-9_-]+)$/);
   if (settingMatch && method === "GET") {
@@ -406,6 +360,18 @@ async function handleApi(request, env) {
     let data = id === "hero_counter" ? await getAndAdvanceHero(env) : (await readSetting(env, id) || {});
     if (id === "website_content" && !readCookie(request, SESSION_COOKIE)) {
       data = slimWebsiteContent(data);
+    }
+    if (id === "video_config" && !readCookie(request, SESSION_COOKIE)) {
+      if (typeof data.gifData === "string" && data.gifData.startsWith("data:image/")) {
+        data = { ...data, gifUrl: `/api/img/heroGif?v=${hashString(data.gifData)}`, gifData: "" };
+      }
+      if (data.gifPerLocale && typeof data.gifPerLocale === "object") {
+        const slim = {};
+        for (const [loc, val] of Object.entries(data.gifPerLocale)) {
+          slim[loc] = typeof val === "string" && val.startsWith("data:image/") ? `/api/img/heroGif-${loc}?v=${hashString(val)}` : val;
+        }
+        data = { ...data, gifPerLocale: slim };
+      }
     }
     return json(data, 200, { "cache-control": `public, max-age=${ttl}` });
   }
@@ -434,9 +400,21 @@ const SECURITY_HEADERS = {
     "frame-ancestors 'self'",
   ].join("; "),
 };
-const withSecurityHeaders = (response) => {
+// Only the two public pages the owner explicitly wants embeddable in their
+// own Muse spaces may be framed cross-origin; every other path (including
+// /admin and /api/*) keeps the strict same-origin framing policy.
+const FRAMEABLE_PATHS = new Set(["/", "/referral"]);
+const withSecurityHeaders = (response, frameable = false) => {
   const wrapped = new Response(response.body, response);
-  for (const [name, value] of Object.entries(SECURITY_HEADERS)) wrapped.headers.set(name, value);
+  for (const [name, value] of Object.entries(SECURITY_HEADERS)) {
+    if (frameable && name === "x-frame-options") continue;
+    if (frameable && name === "content-security-policy") {
+      wrapped.headers.set(name, value.replace("frame-ancestors 'self'", "frame-ancestors *"));
+      continue;
+    }
+    wrapped.headers.set(name, value);
+  }
+  if (frameable) wrapped.headers.delete("x-frame-options");
   return wrapped;
 };
 
@@ -460,7 +438,7 @@ export default {
         }
         return response;
       }
-      if (env.ASSETS) return withSecurityHeaders(await env.ASSETS.fetch(request));
+      if (env.ASSETS) return withSecurityHeaders(await env.ASSETS.fetch(request), FRAMEABLE_PATHS.has(url.pathname));
       return withSecurityHeaders(json({ error: "Static assets binding is not configured." }, 503));
     } catch (error) {
       console.error("Worker request failed", error);

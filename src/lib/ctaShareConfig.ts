@@ -62,12 +62,6 @@ const CTA_SHARE_CONFIG: Record<Locale, CtaShareTarget> = {
     shareTitle: "PartnerFind - Colaboração Global",
     shareMessage: "Conecte-se e colabore com parceiros globais num ecossistema de alto valor no PartnerFind:",
   },
-  "tr-TR": {
-    label: "Paylaş",
-    copiedToast: "Bağlantı Kopyalandı!",
-    shareTitle: "PartnerFind - Küresel İş Birliği",
-    shareMessage: "PartnerFind'te küresel ortaklarla bağlantı kurun ve iş birliği yapın:",
-  },
   "ru-RU": {
     label: "Поделиться",
     copiedToast: "Ссылка скопирована!",

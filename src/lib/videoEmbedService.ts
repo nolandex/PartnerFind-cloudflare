@@ -3,6 +3,11 @@ import { subscribeJson } from "./cloudflareApi";
 export interface VideoEmbedConfig {
   enabled: boolean;
   youtubeVideoId?: string;
+  mp4Url?: string;
+  mp4Poster?: string;
+  gifData?: string;
+  gifUrl?: string;
+  gifPerLocale?: Record<string, string>;
   perLocale?: Record<string, string>;
   updatedAt?: number;
   updatedBy?: string;
@@ -11,23 +16,22 @@ const SETTINGS_ID = "video_config";
 const LOCAL_STORAGE_KEY = "collab_video_settings_v1";
 const DEFAULT_VIDEO_CONFIG: VideoEmbedConfig = {
   enabled: true,
-  youtubeVideoId: "4dXRsOKTvqY",
+  youtubeVideoId: "usbpo8zE3W4",
   perLocale: {
-    "en-US": "z59aWbH0zEQ",
-    "es-ES": "MVtEOD-Freo",
-    "fr-FR": "5q7-_dmIVJw",
-    "ja-JP": "t-jSOCijaCw",
-    "id-ID": "4dXRsOKTvqY",
-    "ar-SA": "5p997wUCxws",
-    "tr-TR": "Ky243UBwls4",
-    "ko-KR": "weGrGrkZrz0",
-    "pt-PT": "83ZyfBOG3_s",
-    "ru-RU": "-B56om5LDnU",
-    "zh-CN": "3MvPPU4CWiw",
+    "id-ID": "usbpo8zE3W4",
+    "en-US": "YUSzBjAD1UU",
+    "es-ES": "z9_V3JYVz8o",
+    "fr-FR": "mW5Ada1HLT8",
+    "ja-JP": "SR_vuyHkCb4",
+    "ar-SA": "DnG8s0_h7QA",
+    "ru-RU": "NvYw9sXjmAg",
+    "ko-KR": "7TdM_63KTEk",
+    "zh-CN": "ntEsj7xj-TQ",
+    "pt-PT": "6-mLAPVMJFo",
   },
 };
 export function getVideoIdForLocale(config: VideoEmbedConfig, locale: string): string {
-  return config.perLocale?.[locale] || config.youtubeVideoId || DEFAULT_VIDEO_CONFIG.youtubeVideoId || "4dXRsOKTvqY";
+  return config.perLocale?.[locale] || config.youtubeVideoId || DEFAULT_VIDEO_CONFIG.youtubeVideoId || "usbpo8zE3W4";
 }
 
 export function getCachedVideoConfig(): VideoEmbedConfig {

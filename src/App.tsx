@@ -26,7 +26,9 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/admin" element={<Suspense fallback={<div style={{ minHeight: "100vh" }} />}><Admin /></Suspense>} />
-          <Route path="/pengundang" element={<Suspense fallback={<div style={{ minHeight: "100vh" }} />}><Pengundang /></Suspense>} />
+          <Route path="/referral" element={<Suspense fallback={<div style={{ minHeight: "100vh" }} />}><Pengundang /></Suspense>} />
+          <Route path="/pengundang" element={<Navigate to="/referral" replace />} />
+          <Route path="/referral-partner" element={<Navigate to="/referral" replace />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </LanguageProvider>
